@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Member Profile{% endblock %}
+{% block content %}
+<body>
+
+<!--    <nav>-->
+<!--        <div class="wrapper">-->
+<!--            <ul>-->
+<!--                <li><a href="{{url_for('home')}}">Home</a></li>-->
+<!--                <li><a href="">Rental List</a></li>-->
+<!--                <li><a href="">cart</a></li>-->
+<!--                <li><a href="">Account</a></li>-->
+<!--                <li><a href="">About</a></li>-->
+<!--                <li><a href="{{url_for('logout')}}">Log Out</a></li>-->
+
+<!--            </ul>-->
+
+<!--        </div>-->
+<!--        <form action="/members" method="POST">-->
+<!--            <div class="rightNav">-->
+<!--                <label>Search By:</label>-->
+
+<!--<select name="criteria" id="criteria">-->
+<!--  <option value="title">Title</option>-->
+<!--  <option value="author">Author</option>-->
+<!--  <option value="genre">Genre</option>-->
+<!--</select>-->
+<!--            <input type="text" name="search" id="search">-->
+<!--            <button class="btn btn-sm">Search</button>-->
+<!--        </div>-->
+
+<!--        </form>-->
+
+<script>
+  function showText() {
+      var text = document.getElementById("hidden");
+      if (text.style.display === "none") {text.style.display = "block";}
+      else {text.style.display = "none";}
+  }
+  </script>
+
+    <div class="container">
+        <h1>Welcome {{first_name}}</h1>
+        <h3>Your Library Card Number is: <t> <u>{{card_number}}</u></h3>
+        <pre></pre>
+        
+        <div>
+          <ul>
+        <h3>Books currently being rented:</h3>
+            <li>{{title}}</li>
+          </ul>
+        </div>
+        <pre></pre>
+
+        <button type='button' onclick="showText()">Account details</button>
+        <button>Set-up Return</button>
+        
+        <div id='hidden' style='display: none'>
+          <div class="account">
+
+            <div class="head-container">
+            {{first_name}} {{last_name}}
+            <label for="name">Account Holder</label>
+            </div>
+            <div class="card-container">
+                <label for="cardnumber">Library Card Number: {{card_number}}</label>
+            </div>
+            <div class="body-container">
+                <label for="">Date of Birth:</label>
+                {{dob}}
+                <pre></pre>
+                <label>Email Address:</label>
+                {{email}}
+                <pre></pre>
+                <label>Status:</label>
+                {{status}}
+                <pre></pre>
+                <pre></pre>
+                <a href="{{url_for('account')}}">Change Account Info</a>
+                <pre></pre>
+                <a href="{{url_for('forgotPassword')}}">Forgot Password</a>
+                <pre></pre>
+                <form method="post" action="{{ url_for('delete_account') }}">
+                  <button>Delete Account</button>
+                </form>
+            </div>
+        </div>
+          <div>
+        
+    </div>
+          
+
+        </div>
+    </div>
+<pre></pre>
+<form action="/members" method="POST">
+                <label>Search By:</label>
+
+<select name="criteria" id="criteria">
+  <option value="title">Title</option>
+  <option value="author">Author</option>
+  <option value="genre">Genre</option>
+</select>
+
+
+        <pre></pre>
+        <Input type="search" name="value" placeholder="Item lookup"></Input>
+        <button>Browse</button>
+        <table>
+  <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Media Type</th>
+        <th>Book ID</th>
+        <th>Copy ID</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in book_list %}
+    <tr>
+        {% for book in row %}
+        <td>{{book}}&nbsp&nbsp&nbsp&nbsp</td>
+        {% endfor %}
+        <td>
+            <button type="submit" name="rent" value={{row[5]}}>Rent</button>
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</form>
+</body>  
+{% endblock %}
+

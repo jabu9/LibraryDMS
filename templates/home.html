@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row">
+    <div style="width: 50rem;margin: 3rem auto 0 auto" class="col-12">
+        <form action="/" method="GET" class="d-flex" role="search">
+            <div class="input-group mb-3">
+                {% if search_value %}
+                <input id="search-box" type="text" value="{{ search_value }}" class="form-control" name="search"
+                    placeholder="Search...">
+                {% else %}
+                <input id="search-box" type="text" class="form-control" name="search" placeholder="Search...">
+                {% endif %}
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+{%for car in carousels%}
+<div data-id="{{car.category}}" class="row carousel">
+    <div class="col-12">
+        <h4>{{ car.category }}</h4>
+    </div>
+    <div class="col-12 d-flex p-3">
+        <div class="carousel-arrow-wrapper">
+            <i class="bi bi-chevron-left carousel-arrow pointer hide-elt" data-dir="left"></i>
+        </div>
+        <div class="carousel-image-block d-flex">
+            {%for book in car.books%}
+            <div class="carousel-image-wrapper">
+                <img class="carousel-image mb-1" src="{{ book.img_url }}" alt="{{ book.title }}">
+                <span>
+                    <a href="/checkout/{{book.book_id}}" class="btn btn-sm btn-primary">
+                        Checkout
+                    </a>
+                </span>
+            </div>
+            {%endfor%}
+        </div>
+        <div class="carousel-arrow-wrapper">
+            <i data-category="{{car.category}}" data-page="1" data-dir="right"
+                class="bi bi-chevron-right carousel-arrow pointer {{ 'hide-elt' if car.next_set }}"></i>
+        </div>
+    </div>
+</div>
+{%endfor%}
+<script>
+    window.onload = function () {
+        const searchBox = document.getElementById("search-box").value;
+        const arrows = document.getElementsByClassName("carousel-arrow");
+        for (let i = 0; i < arrows.length; i++) {
+            const e = arrows[i];
+            e.addEventListener("click", (evt) => {
+                const category = e.dataset.category;
+                const page = e.dataset.page;
+                const dir = e.dataset.dir;
+                const qStr = new URLSearchParams({
+                    category,
+                    page,
+                    searchBox: searchBox
+                })
+                fetch("/fetch-next-set?" + qStr, {
+                    method: "GET"
+                })
+                    .then(resp => resp.text())
+                    .then(resp => {
+                        const idStr = `[data-id="${category}"]`;
+                        const div = document.querySelector(idStr);
+                        if (div) {
+                            const imgBlocks = div.getElementsByClassName('carousel-image-block');
+                            if (imgBlocks.length) {
+                                imgBlocks[0].innerHTML = resp;
+
+                                if (dir == 'left') {
+                                }
+                                else {
+                                    const nexPageValue = (+page) + 1;
+                                    e.setAttribute('data-page', nexPageValue);
+                                }
+                            }
+                        }
+                    })
+            });
+        }
+    }
+</script>
+{% endblock %}
