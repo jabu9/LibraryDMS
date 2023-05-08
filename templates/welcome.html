@@ -3,6 +3,34 @@
 {% block content %}
 <body>
 
+<!--    <nav>-->
+<!--        <div class="wrapper">-->
+<!--            <ul>-->
+<!--                <li><a href="{{url_for('home')}}">Home</a></li>-->
+<!--                <li><a href="">Rental List</a></li>-->
+<!--                <li><a href="">cart</a></li>-->
+<!--                <li><a href="">Account</a></li>-->
+<!--                <li><a href="">About</a></li>-->
+<!--                <li><a href="{{url_for('logout')}}">Log Out</a></li>-->
+
+<!--            </ul>-->
+
+<!--        </div>-->
+<!--        <form action="/members" method="POST">-->
+<!--            <div class="rightNav">-->
+<!--                <label>Search By:</label>-->
+
+<!--<select name="criteria" id="criteria">-->
+<!--  <option value="title">Title</option>-->
+<!--  <option value="author">Author</option>-->
+<!--  <option value="genre">Genre</option>-->
+<!--</select>-->
+<!--            <input type="text" name="search" id="search">-->
+<!--            <button class="btn btn-sm">Search</button>-->
+<!--        </div>-->
+
+<!--        </form>-->
+
 <script>
   function showText() {
       var text = document.getElementById("hidden");
@@ -11,12 +39,12 @@
   }
   </script>
 
-    <div class="container">
-        <h1>Welcome {{first_name}}</h1>
+    <div class="welcome">
+        <h1 class="card-number">Welcome {{first_name}}</h1>
         <h3>Your Library Card Number is: <t> <u>{{card_number}}</u></h3>
         <pre></pre>
         
-        <div>
+        <div class="rent-list">
           <ul>
         <h3>Books currently being rented:</h3>
             <li>{{title}}</li>
@@ -24,9 +52,8 @@
         </div>
         <pre></pre>
 
-        <button type='button' onclick="showText()">Account details</button>
-        <button>Set-up Return</button>
-        
+        <button class="primary" type='button' onclick="showText()">Account details</button>
+
         <div id='hidden' style='display: none'>
           <div class="account">
 
@@ -35,7 +62,8 @@
             <label for="name">Account Holder</label>
             </div>
             <div class="card-container">
-                <label for="cardnumber">Library Card Number: {{card_number}}</label>
+                <label for="cardnumber">Library Card Number: </label>
+                {{card_number}}
             </div>
             <div class="body-container">
                 <label for="">Date of Birth:</label>
@@ -47,13 +75,17 @@
                 <label>Status:</label>
                 {{status}}
                 <pre></pre>
+                <div class="button-container">
+                  <a href="{{url_for('account')}}">
+                    <button class="primary" type="button">Change Account Info</button></a>
                 <pre></pre>
-                <a href="{{url_for('account')}}">Change Account Info</a>
-                <pre></pre>
-                <a href="{{url_for('forgotPassword')}}">Forgot Password</a>
+                <a href="{{url_for('forgotPassword')}}">
+                  <button class="primary" type="button">Change Password</button></a>
                 <pre></pre>
                 <form method="post" action="{{ url_for('delete_account') }}">
-                  <button>Delete Account</button>
+                  <button class="primary" style="color: rgb(168, 19, 19);">Delete Account</button>
+                </div>
+                
                 </form>
             </div>
         </div>
@@ -66,19 +98,24 @@
     </div>
 <pre></pre>
 <form action="/members" method="POST">
-                <label>Search By:</label>
+<div class="container">
+    <button class="primary" name="return" value={{copy_id}}>Return Rental</button>
+</div>
+    <pre></pre>
+    <div class="browse">
+      <label>Search By:</label>
 
-<select name="criteria" id="criteria">
-  <option value="title">Title</option>
-  <option value="author">Author</option>
-  <option value="genre">Genre</option>
-</select>
-
-
-        <pre></pre>
-        <Input type="search" name="value" placeholder="Item lookup"></Input>
-        <button>Browse</button>
-        <table>
+      <select name="criteria" id="criteria">
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+        <option value="genre">Genre</option>
+      </select>
+     
+      <Input type="search" name="value" placeholder="Item lookup"></Input>
+      <button class="secondary">Browse</button>
+    </div>
+  
+        <table cellspacing="0">
   <thead>
     <tr>
         <th>Title</th>
@@ -87,6 +124,8 @@
         <th>Media Type</th>
         <th>Book ID</th>
         <th>Copy ID</th>
+        <th>Status</th>
+        <th>Rent</th>
     </tr>
   </thead>
   <tbody>
@@ -96,7 +135,7 @@
         <td>{{book}}&nbsp&nbsp&nbsp&nbsp</td>
         {% endfor %}
         <td>
-            <button type="submit" name="rent" value={{row[5]}}>Rent</button>
+            <button class="secondary" type="submit" name="rent" value={{row[5]}}>Rent</button>
         </td>
     </tr>
   {% endfor %}
