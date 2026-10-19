@@ -1,6 +1,7 @@
 # Library DMS web application - CMSC 495 group 3
 # a web application to manage library database, allowing members and admins to log in and search the database.
 
+import os
 from functools import wraps
 import mysql.connector
 from flask import *
@@ -8,15 +9,15 @@ import bcrypt
 from datetime import date
 from enum import Enum
 
-# update the below db_password with your personal MySQL password
-host = 'localhost'
-user = 'root'
-db_password = 'MysqlDB1'
-schema = 'library'
+# Database settings come from environment variables (see README / .env.example)
+host = os.environ.get('LIBRARY_DB_HOST', 'localhost')
+user = os.environ.get('LIBRARY_DB_USER', 'root')
+db_password = os.environ.get('LIBRARY_DB_PASSWORD', '')
+schema = os.environ.get('LIBRARY_DB_NAME', 'library')
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'tempsecretkey'
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', os.urandom(24).hex())
 
 # Book, Rented_Book, Carousel and Return_Book_Result used for display of books in home page carousel
 class Book:

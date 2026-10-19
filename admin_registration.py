@@ -1,10 +1,11 @@
+import os
 import bcrypt
 import mysql.connector
 
-host = 'localhost'
-user = 'root'
-db_password = 'db_password'
-schema = 'library'
+host = os.environ.get('LIBRARY_DB_HOST', 'localhost')
+user = os.environ.get('LIBRARY_DB_USER', 'root')
+db_password = os.environ.get('LIBRARY_DB_PASSWORD', '')
+schema = os.environ.get('LIBRARY_DB_NAME', 'library')
 
 
 def hash_pw(pwd):

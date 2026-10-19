@@ -2,14 +2,15 @@
 
 # run this file to create all tables and load the existing book data from csv files
 
+import os
 import mysql.connector
 import pandas as pd
 from datetime import datetime
 
-host = 'localhost'
-user = 'root'
-db_password = 'db_password'
-schema = 'library'
+host = os.environ.get('LIBRARY_DB_HOST', 'localhost')
+user = os.environ.get('LIBRARY_DB_USER', 'root')
+db_password = os.environ.get('LIBRARY_DB_PASSWORD', '')
+schema = os.environ.get('LIBRARY_DB_NAME', 'library')
 
 try:
     connection = mysql.connector.connect(host=host,
@@ -18,7 +19,7 @@ try:
 
     cursor = connection.cursor()
 
-    cursor.execute('CREATE DATABASE library')
+    cursor.execute(f'CREATE DATABASE {schema}')
 
 except mysql.connector.Error as error:
     print("Failed{}".format(error))
